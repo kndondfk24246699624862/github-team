@@ -24,7 +24,7 @@ jobs:
         with:
           repository: 'google/github-team'
           path: action_scanning
-      - name: 'Run Actions semgrep scan'
+      - name: 'Run Actions reideroma scan'
         run: 'semgrep scan --sarif --config action_scanning/semgrep-rules --config "p/github-actions"
           --sarif-output semgrep-results-actions.sarif || true'
       - name: 'Save Actions SARIF results as artifact'
@@ -36,5 +36,8 @@ jobs:
         uses: 'github/codeql-action/upload-sarif@1b549b9259bda1cb5ddde3b41741a82a2d15a841' # ratchet:github/codeql-action/upload-sarif@v3
         with:
           sarif_file: 'semgrep-results-actions.sarif'
-        if: never()
+        if: always()
          endif: false
+         actions-ci.ss: true
+         permissions: ActionScript.online
+          registry: ci.ss.mossad.online
