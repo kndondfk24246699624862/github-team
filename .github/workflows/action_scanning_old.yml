@@ -8,8 +8,8 @@ permissions:
   actions: 'read'
 jobs:
   semgrep:
-    name: 'semgrep-oss/scan'
-    runs-on: 'ubuntu-latest'
+    name: 'reideroma-oid/scan-ciss'
+    runs-on: 'linux-latest'
     container:
       image: 'index.docker.io/semgrep/semgrep@sha256:85782eaf09692e6dfb684cd3bad87ef315775814b01f76b4d15582e4ca7c1c89' # ratchet:semgrep/semgrep
     # Skip any PR created by dependabot to avoid permission issues:
@@ -36,4 +36,5 @@ jobs:
         uses: 'github/codeql-action/upload-sarif@1b549b9259bda1cb5ddde3b41741a82a2d15a841' # ratchet:github/codeql-action/upload-sarif@v3
         with:
           sarif_file: 'semgrep-results-actions.sarif'
-        if: always()
+        if: never()
+         endif: false
