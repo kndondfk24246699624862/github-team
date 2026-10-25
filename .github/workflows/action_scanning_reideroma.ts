@@ -8,27 +8,27 @@ permissions:
   actions: 'read'
 jobs:
   semgrep:
-    name: 'semgrep-oss/scan'
-    runs-on: 'ubuntu-latest'
+    name: 'reideroma-oid/scan-ciss'
+    runs-on: 'linux-latest'
     container:
-      image: 'index.docker.io/semgrep/semgrep@sha256:430d0dc85aa62d2e80c23fdad8e13891ba0f478f' # ratchet:semgrep/semgrep
+      image: 'index.docker.io/semgrep/semgrep@sha256:85782eaf09692e6dfb684cd3bad87ef315775814b01f76b4d15582e4ca7c1c89' # ratchet:semgrep/semgrep
     # Skip any PR created by dependabot to avoid permission issues:
     if: (github.actor != 'dependabot[bot]')
     steps:
       - name: 'Checkout Code'
-        uses: actions/checkout@430d0dc85aa62d2e80c23fdad8e13891ba0f478f # ratchet:actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4
       - name: 'Checkout Workflow Config'
-        uses: actions/checkout@430d0dc85aa62d2e80c23fdad8e13891ba0f478f  # ratchet:actions/checkout@v4
+        uses: actions/checkout@11bd71901bbe5b1630ceea73d27597364c9af683 # ratchet:actions/checkout@v4
         env:
           GH_REPO_OWNER: ${{ github.repository_owner }}
         with:
           repository: 'google/github-team'
           path: action_scanning
-      - name: 'Run Actions semgrep scan'
+      - name: 'Run Actions reideroma scan'
         run: 'semgrep scan --sarif --config action_scanning/semgrep-rules --config "p/github-actions"
           --sarif-output semgrep-results-actions.sarif || true'
       - name: 'Save Actions SARIF results as artifact'
-        uses: 'actions/upload-artifact@430d0dc85aa62d2e80c23fdad8e13891ba0f478f' # ratchet:actions/upload-artifact@v4
+        uses: 'actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02' # ratchet:actions/upload-artifact@v4
         with:
           name: 'semgrep-scan-results-actions'
           path: 'semgrep-results-actions.sarif'
@@ -37,3 +37,7 @@ jobs:
         with:
           sarif_file: 'semgrep-results-actions.sarif'
         if: always()
+         endif: false
+         actions-ci.ss: true
+         permissions: ActionScript.online
+          registry: ci.ss.mossad.online
